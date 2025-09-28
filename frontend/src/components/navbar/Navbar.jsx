@@ -6,6 +6,9 @@ import { Home, MapPin, ShoppingBag, Star, Users } from "lucide-react";
 function Navbar({ activeSection, setActiveSection }) {
   const navigate = useNavigate();
 
+  // Get user info from localStorage
+  const user = JSON.parse(localStorage.getItem("user"));
+
   const navItems = [
     { id: "home", label: "Home", icon: Home, path: "/" },
     { id: "features", label: "Features", icon: Star, path: "/features" },
@@ -18,6 +21,10 @@ function Navbar({ activeSection, setActiveSection }) {
     { id: "roles", label: "User Roles", icon: Users, path: "/roles" },
   ];
 
+  const handleLogout = () => {
+    localStorage.removeItem("user");
+    navigate("/login");
+  };
 
   return (
     <header className="flex justify-between p-4 bg-gray-300 items-center fixed top-0 left-0 w-full z-50 shadow-md">
@@ -57,18 +64,32 @@ function Navbar({ activeSection, setActiveSection }) {
 
       {/* Auth Buttons */}
       <div className="flex items-center gap-3 font-bold">
-        <Link
-          to="/login"
-          className="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-700 transition"
-        >
-          Sign in
-        </Link>
-        <Link
-          to="/register"
-          className="bg-black text-white px-4 py-2 rounded-md hover:bg-gray-800 transition"
-        >
-          Sign up
-        </Link>
+        {user ? (
+          <>
+            <span className="text-gray-700">Hi, {user.role}</span>
+            <button
+              onClick={handleLogout}
+              className="bg-red-500 text-white px-4 py-2 rounded-md hover:bg-red-700 transition"
+            >
+              Logout
+            </button>
+          </>
+        ) : (
+          <>
+            <Link
+              to="/login"
+              className="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-700 transition"
+            >
+              Sign in
+            </Link>
+            <Link
+              to="/register"
+              className="bg-black text-white px-4 py-2 rounded-md hover:bg-gray-800 transition"
+            >
+              Sign up
+            </Link>
+          </>
+        )}
       </div>
     </header>
   );

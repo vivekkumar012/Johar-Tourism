@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Lock } from "lucide-react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import axios from "axios";
 import Footer from "../components/Footer";
 import Navbar from "../components/navbar/Navbar";
 
@@ -10,6 +11,9 @@ const LoginPage = () => {
     password: "",
     role: "Tourist",
   });
+
+  const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
 
   const roles = [
     "Tourist",
@@ -25,10 +29,58 @@ const LoginPage = () => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log("Login Data:", formData);
-    // API call to backend here
+    setLoading(true);
+    try {
+      const res = await axios.post("http://localhost:3000/api/auth/login", formData);
+
+      if (res.status === 200) {
+        const { token, role } = res.data;
+
+        // Save token in localStorage for authentication
+        localStorage.setItem("token", token);
+        localStorage.setItem("role", role);
+
+        alert("Login successful!");
+
+        // Redirect based on role
+        switch (role) {
+          case "Tourist":
+            navigate("/dashboard/tourist");
+            break;
+          case "Local Guide":
+            navigate("/dashboard/guide");
+            break;
+          case "Tribal Artisan":
+            navigate("/dashboard/artisan");
+            break;
+          case "Homestay Owner":
+            navigate("/dashboard/homestay");
+            break;
+          case "Transport Provider":
+            navigate("/dashboard/transport");
+            break;
+          case "Tourism Official":
+            navigate("/dashboard/official");
+            break;
+          case "Event Organizer":
+            navigate("/dashboard/event");
+            break;
+          default:
+            navigate("/");
+        }
+      }
+    } catch (err) {
+      console.error(err);
+      if (err.response && err.response.data.message) {
+        alert(err.response.data.message);
+      } else {
+        alert("Login failed. Please try again.");
+      }
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -79,9 +131,10 @@ const LoginPage = () => {
 
             <button
               type="submit"
-              className="w-full bg-green-600 text-white font-semibold py-3 rounded-lg hover:bg-green-700 transition"
+              disabled={loading}
+              className="w-full bg-green-600 text-white font-semibold py-3 rounded-lg hover:bg-green-700 transition disabled:opacity-50"
             >
-              Login
+              {loading ? "Logging in..." : "Login"}
             </button>
           </form>
 

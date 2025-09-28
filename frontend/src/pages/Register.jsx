@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Users } from "lucide-react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import axios from "axios";
 import Footer from "../components/Footer";
 import Navbar from "../components/navbar/Navbar";
 
@@ -11,6 +12,8 @@ const RegisterPage = () => {
     password: "",
     role: "Tourist",
   });
+
+  const navigate = useNavigate();
 
   const roles = [
     "Tourist",
@@ -26,10 +29,24 @@ const RegisterPage = () => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log("Register Data:", formData);
-    // API call to backend here
+    try {
+      // ✅ Change the URL to your backend port (e.g. 5000)
+      const res = await axios.post("http://localhost:3000/api/auth/register", formData);
+
+      if (res.status === 201 || res.status === 200) {
+        alert("Registration successful! Please login.");
+        navigate("/login"); // redirect with react-router
+      }
+    } catch (err) {
+      console.error(err);
+      if (err.response && err.response.data.message) {
+        alert(err.response.data.message);
+      } else {
+        alert("Something went wrong! Please try again.");
+      }
+    }
   };
 
   return (
