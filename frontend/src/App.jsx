@@ -1,12 +1,12 @@
 import "./App.css";
 import Home from "./pages/Home";
 import { Routes, Route } from "react-router-dom";
-import Register from "./pages/Register";
 import { Toaster } from "react-hot-toast"
-import Login from "./pages/Login"
 import FeaturesSection from "./components/feature/FeatureSection";
 import DestinationsSection from "./components/destination/DestinationsSection ";
 import RolesSection from "./components/roles/RoleSection";
+import RegisterPage from "./pages/Register";
+import LoginPage from "./pages/Login";
 
 
 function App() {
@@ -14,8 +14,8 @@ function App() {
     <div>
       <Routes>
         <Route path="/" element={<Home />} />
-        <Route path="/login" element={<Login />} />
-        <Route path="/register" element={<Register />} />
+        <Route path="/login" element={<LoginPage />} />
+        <Route path="/register" element={<RegisterPage />} />
         <Route path="/features" element={<FeaturesSection />} />
         <Route path="/destinations" element={<DestinationsSection />} />
         <Route path="/roles" element={<RolesSection />} />

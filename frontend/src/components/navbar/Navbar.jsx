@@ -43,10 +43,10 @@ function Navbar({ activeSection, setActiveSection }) {
           <button
             key={id}
             onClick={() => navigate(path)}
-            className={`flex items-center space-x-2 px-3 py-2 rounded-lg transition-all duration-200 ${
+            className={`flex items-center space-x-2 px-3 py-2 rounded-lg transition-all duration-200 cursor-pointer ${
               activeSection === id
                 ? "bg-green-100 text-green-700"
-                : "text-gray-600 hover:text-green-700 hover:bg-green-50"
+                : "text-gray-600 hover:bg-gray-100"
             }`}
           >
             <Icon className="h-4 w-4" />

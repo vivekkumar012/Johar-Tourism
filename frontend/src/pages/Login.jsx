@@ -1,92 +1,96 @@
-import axios from "axios";
-import { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
-import DriveFolderUploadOutlinedIcon from "@mui/icons-material/DriveFolderUploadOutlined";
-
-import backgroundImage from "../assets/bg.jpg";
-import Spinner from "../components/spinner/LoadingSpinner";
-import Navbar from "../components/navbar/Navbar";
+import React, { useState } from "react";
+import { Lock } from "lucide-react";
+import { Link } from "react-router-dom";
 import Footer from "../components/Footer";
-import toast from "react-hot-toast";
+import Navbar from "../components/navbar/Navbar";
 
-const Login = () => {
-  const [loading2, setLoading2] = useState(false);
+const LoginPage = () => {
+  const [formData, setFormData] = useState({
+    email: "",
+    password: "",
+    role: "Tourist",
+  });
 
-  const [email, setEmail] = useState("");
+  const roles = [
+    "Tourist",
+    "Local Guide",
+    "Tribal Artisan",
+    "Homestay Owner",
+    "Transport Provider",
+    "Tourism Official",
+    "Event Organizer",
+  ];
 
-  const [password, setPassword] = useState("");
+  const handleChange = (e) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
 
-  const navigate = useNavigate();
-
-  const handleSubmit = async (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
+    console.log("Login Data:", formData);
+    // API call to backend here
   };
 
   return (
     <div>
       <Navbar />
       <br />
-      <div
-        style={{
-          backgroundImage: `url(${backgroundImage})`,
-          backgroundSize: "cover",
-          backgroundPosition: "center",
-          backgroundRepeat: "no-repeat",
-        }}
-      >
-        <div className="py-10 lg:py-20 px-16 lg:px-96 md:px-64 flex flex-col text-center">
-          <div className="mb-8 text-center">
-            <h2 className="text-5xl font-bold">SIGN IN</h2>
+      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-gray-50 to-white px-4">
+        <div className="max-w-md w-full bg-white shadow-xl rounded-xl p-8">
+          <div className="text-center mb-6">
+            <Lock className="mx-auto h-12 w-12 text-green-600" />
+            <h2 className="text-3xl font-bold text-gray-800">Login</h2>
+            <p className="text-gray-500">Access your account by role</p>
           </div>
-          
-          <div>
-            <form onSubmit={handleSubmit}>
-              
-              <div className="mb-6">
-                <input
-                  placeholder="Email"
-                  type="text"
-                  id="email"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  class="bordder-[#E9EDF4] w-full rounded-3xl border bg-[#FCFDFE] py-3 px-5 text-base text-body-color placeholder-[#ACB6BE] outline-none focus:ring focus:border-[#41A4FF] focus-visible:shadow-none"
-                />
-              </div>
 
-              <div className="mb-6">
-                <input
-                  placeholder="Password"
-                  type="password"
-                  id="password"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  className="bordder-[#E9EDF4] w-full rounded-3xl border bg-[#FCFDFE] py-3 px-5 text-base text-body-color focus:ring placeholder-[#ACB6BE] outline-none focus:border-[#41A4FF] focus-visible:shadow-none"
-                />
-              </div>
+          <form onSubmit={handleSubmit} className="space-y-5">
+            <input
+              type="email"
+              name="email"
+              placeholder="Email Address"
+              value={formData.email}
+              onChange={handleChange}
+              required
+              className="w-full border rounded-lg px-4 py-3 text-gray-700 focus:ring-2 focus:ring-green-500"
+            />
 
-              <div className="mb-10">
-                <button
-                  type="submit"
-                  className=" w-full font-bold text-center hover:bg-gray-600 cursor-pointer rounded-3xl bg-[#41A4FF] py-3 px-5 text-white transition hover:bg-opacity-90"
-                >
-                  Login
-                </button>
-              </div>
-            </form>
-          </div>
-          {loading2 && <Spinner />}
+            <input
+              type="password"
+              name="password"
+              placeholder="Password"
+              value={formData.password}
+              onChange={handleChange}
+              required
+              className="w-full border rounded-lg px-4 py-3 text-gray-700 focus:ring-2 focus:ring-green-500"
+            />
 
-          <div className="flex flex-col justify-center text-center pb-20">
-            <p className="text-base text-[#adadad]">
-              Not Already a member yet?
-              <Link
-                to="/register"
-                className="text-primary hover:underline ms-2 font-bold"
-              >
-                Sign up
-              </Link>
-            </p>
-          </div>
+            <select
+              name="role"
+              value={formData.role}
+              onChange={handleChange}
+              className="w-full border rounded-lg px-4 py-3 text-gray-700 focus:ring-2 focus:ring-green-500"
+            >
+              {roles.map((role, idx) => (
+                <option key={idx} value={role}>
+                  {role}
+                </option>
+              ))}
+            </select>
+
+            <button
+              type="submit"
+              className="w-full bg-green-600 text-white font-semibold py-3 rounded-lg hover:bg-green-700 transition"
+            >
+              Login
+            </button>
+          </form>
+
+          <p className="mt-6 text-center text-gray-600">
+            Don’t have an account?{" "}
+            <Link to="/register" className="text-green-600 font-medium">
+              Register
+            </Link>
+          </p>
         </div>
       </div>
       <Footer />
@@ -94,4 +98,4 @@ const Login = () => {
   );
 };
 
-export default Login;
+export default LoginPage;
